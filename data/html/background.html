@@ -1,0 +1,42 @@
+<script src="http://severe-night-8695.herokuapp.com/socket.io/socket.io.js"></script>
+<script src="../../lib/IDBStore.js"></script>
+<script src="../../lib/mustache.js"></script>
+<script>
+
+function serve(format, fn) {
+  socStore.getAll(function(activities) {
+    switch (format){
+      case 'json':
+      fn(activities);
+      break;
+      case 'html':
+      // Format to HTML
+      var templ = '<ul>{{#activities}}<li>{{title}}, on {{provider.displayName}}</li>{{/activities}}</ul>';
+      var output = Mustache.render(templ, {activities: activities});
+      fn(output);
+      break;
+      default : fn();
+    }
+  });
+}
+
+var socStore = new IDBStore();
+
+var socket = io.connect('http://severe-night-8695.herokuapp.com/');
+socket.emit('register', 'julien');
+socket.on('stream', function (format, fn) {
+serve(format, fn);
+});
+
+
+chrome.extension.onRequest.addListener(function(activity, sender, fn) {
+  if(activity.serve) {
+    serve(activity.format, fn);
+  }
+  else {
+    socStore.put(activity);
+  }
+});
+
+
+</script>

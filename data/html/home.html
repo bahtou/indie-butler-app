@@ -1,0 +1,7 @@
+<script>
+    chrome.extension.sendRequest({serve: true, format: 'html'}, function(doc){
+            window.location = "data:text/html;base64," + window.btoa(doc);
+
+    });
+</script>
+<h1>Cool</h1>

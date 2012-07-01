@@ -1,0 +1,29 @@
+{
+  "name": "indie-buttler",
+  "description": "Indie Buttler App",
+  "permissions": [
+    "background",
+    "unlimitedStorage",
+    "http://*/",
+    "https://*/"
+  ],
+  "content_scripts": [
+    {
+      "js": [
+        "/lib/jquery.js",
+        "/lib/interceptor.js"
+      ],
+      "matches": [
+        "*://*/*"
+      ],
+      "all_frames": true
+    }
+  ],
+  "background_page": "/data/html/background.html",
+  "version": "0.0.0",
+  "app": {
+    "launch": {
+      "local_path": "/data/html/home.html"
+    }
+  }
+}

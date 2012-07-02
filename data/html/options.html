@@ -1,0 +1,48 @@
+<script src="../../lib/jquery.js"></script>
+<script src="../../lib/underscore-min.js"></script>
+<script src="../../lib/IDBStore.js"></script>
+
+<h1>Options</h1>
+
+<div>
+<label>
+  <span>Relay (leave empty if you don't want to serve your content).</span><br/>
+  <input type="text" id="relay" />
+</label>
+</div>
+
+<div>
+<label>
+  <span>Your personal domain</span> <br/>
+  <input type="text" id="domain" />
+</label>
+</div>
+
+<ul>
+  <li>
+    Create a CNAME of your domain for butler.yourdomain.tld that points to the relay server.
+  </li>
+  <li>
+    Make sure the relay server handles your domain.
+  </li>
+  <li>
+    Add a rel=me link to any service that supports IndieAuth to the root of your domain.
+  </li>
+</ul>
+
+
+<script>
+  $("#relay").val(localStorage.getItem("relay"));
+  $("#domain").val(localStorage.getItem("domain"));
+
+  $("#relay").change(function() {
+    localStorage.setItem("relay",  $("#relay").val());
+  });
+
+  $("#domain").change(function() {
+    localStorage.setItem("domain",  $("#domain").val());
+  });
+
+</script>
+
+

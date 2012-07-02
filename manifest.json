@@ -7,11 +7,13 @@
     "http://*/",
     "https://*/"
   ],
+  "options_page": "/data/html/options.html",
   "content_scripts": [
     {
       "js": [
         "/lib/jquery.js",
-        "/lib/interceptor.js"
+        "/lib/interceptors/twitter.js",
+        "/lib/interceptors/facebook.js"
       ],
       "matches": [
         "*://*/*"

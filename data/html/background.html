@@ -1,87 +1,48 @@
-<script src="http://severe-night-8695.herokuapp.com/socket.io/socket.io.js"></script>
-<script src="../../lib/underscore-min.js"></script>
-<script src="../../lib/IDBStore.js"></script>
-<script src="../../lib/mustache.js"></script>
+<script src="../../lib/vendor/socket.io.js"></script>
+<script src="../../lib/vendor/underscore-min.js"></script>
+<script src="../../lib/vendor/IDBStore.js"></script>
+<script src="../../lib/vendor/mustache.js"></script>
+<script src="../../lib/requests/get.js"></script>
 <script>
 
-function serve(format, fn) {
-  socStore.getAll(function(act) {
-
-    var activities = _.sortBy(act, function(activity) {
-      return -activity.published;
-    });
-
-    switch (format){
-      case 'json':
-        fn(activities);
-      break;
-      case 'atom':
-      var templ = '<?xml version="1.0" encoding="UTF-8"?>\
-      <feed xmlns="http://www.w3.org/2005/Atom">\
-        <id></id>\
-        <title></title>\
-        <link rel="hub" href="http://pubsubhubbub.superfeedr.com/"/>\
-        <link rel="self" href=""/>\
-        <updated></updated>\
-        {{#activities}}\
-        <entry>\
-        <title>{{title}}</title>\
-        <link href=""/>\
-        <published></published>\
-        <updated></updated>\
-        <id></id>\
-        <content type="html"></content>\
-        <author>\
-        <name></name>\
-        <uri></uri>\
-        </author>\
-        </entry>\
-        {{/activities}}\
-        </feed>\
-        ';
-      var output = Mustache.render(templ, {activities: activities});
-      fn(output);
-      case 'html':
-        var templ = '<ul>{{#activities}}<li>{{title}}, on {{provider.displayName}}</li>{{/activities}}</ul>';
-        var output = Mustache.render(templ, {activities: activities});
-        fn(output);
-      break;
-      default : fn();
-    }
-  });
-}
-
+// Store
 var socStore = new IDBStore();
 
+var relay = localStorage.getItem("relay");
+var domain = localStorage.getItem("domain");
 var ioOptions = {
   'max reconnection attempts' : 100000,
   'reconnection limit'        : 1000 * 60 * 10,
   'reconnect'                 : true,
 };
 
-
-console.log('Butler up!');
-var socket = io.connect('http://buttler.jit.su/', ioOptions);
-socket.on('connect', function() {
-  socket.emit('register', 'julien');
-  socket.on('stream', function (format, fn) {
-    serve(format, fn);
+// Listening to external (relay) requests
+if(relay) {
+  console.log('Butler up!', relay);
+  var socket = io.connect(relay, ioOptions);
+  socket.on('connect', function() {
+    socket.emit('register', domain);
+    socket.on('get', function (request, fn) {
+      console.log(request);
+      get(request, fn);
+    });
+    console.log('connected as', domain);
   });
-  console.log('connected');
-});
-socket.on('disconnect', function() {
-  console.log('disconnected');
-});
+  socket.on('disconnect', function() {
+    console.log('disconnected');
+  });
+}
 
 
+// Internal events
 chrome.extension.onRequest.addListener(function(activity, sender, fn) {
-  if(activity.serve) {
-    serve(activity.format, fn);
+  if(activity.get) {
+    get(activity.get, fn);
   }
   else {
-      if(typeof(activity.id) === 'undefined') {
-          activity.id = Math.random().toString(36).substring(8);
-      }
+    if(typeof(activity.id) === 'undefined') {
+      activity.id = Math.random().toString(36).substring(8);
+    }
     socStore.put(activity);
   }
 });

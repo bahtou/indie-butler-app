@@ -79,6 +79,9 @@ chrome.extension.onRequest.addListener(function(activity, sender, fn) {
     serve(activity.format, fn);
   }
   else {
+      if(typeof(activity.id) === 'undefined') {
+          activity.id = Math.random().toString(36).substring(8);
+      }
     socStore.put(activity);
   }
 });

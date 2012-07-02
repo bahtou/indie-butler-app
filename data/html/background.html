@@ -15,6 +15,32 @@ function serve(format, fn) {
       case 'json':
         fn(activities);
       break;
+      case 'atom':
+      var templ = '<?xml version="1.0" encoding="UTF-8"?>\
+      <feed xmlns="http://www.w3.org/2005/Atom">\
+        <id></id>\
+        <title></title>\
+        <link rel="hub" href="http://pubsubhubbub.superfeedr.com/"/>\
+        <link rel="self" href=""/>\
+        <updated></updated>\
+        {{#activities}}\
+        <entry>\
+        <title>{{title}}</title>\
+        <link href=""/>\
+        <published></published>\
+        <updated></updated>\
+        <id></id>\
+        <content type="html"></content>\
+        <author>\
+        <name></name>\
+        <uri></uri>\
+        </author>\
+        </entry>\
+        {{/activities}}\
+        </feed>\
+        ';
+      var output = Mustache.render(templ, {activities: activities});
+      fn(output);
       case 'html':
         var templ = '<ul>{{#activities}}<li>{{title}}, on {{provider.displayName}}</li>{{/activities}}</ul>';
         var output = Mustache.render(templ, {activities: activities});

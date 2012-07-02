@@ -1,19 +1,24 @@
 <script src="http://severe-night-8695.herokuapp.com/socket.io/socket.io.js"></script>
+<script src="../../lib/underscore-min.js"></script>
 <script src="../../lib/IDBStore.js"></script>
 <script src="../../lib/mustache.js"></script>
 <script>
 
 function serve(format, fn) {
-  socStore.getAll(function(activities) {
+  socStore.getAll(function(act) {
+
+    var activities = _.sortBy(act, function(activity) {
+      return -activity.published;
+    });
+
     switch (format){
       case 'json':
-      fn(activities);
+        fn(activities);
       break;
       case 'html':
-      // Format to HTML
-      var templ = '<ul>{{#activities}}<li>{{title}}, on {{provider.displayName}}</li>{{/activities}}</ul>';
-      var output = Mustache.render(templ, {activities: activities});
-      fn(output);
+        var templ = '<ul>{{#activities}}<li>{{title}}, on {{provider.displayName}}</li>{{/activities}}</ul>';
+        var output = Mustache.render(templ, {activities: activities});
+        fn(output);
       break;
       default : fn();
     }
@@ -22,10 +27,24 @@ function serve(format, fn) {
 
 var socStore = new IDBStore();
 
-var socket = io.connect('http://severe-night-8695.herokuapp.com/');
-socket.emit('register', 'julien');
-socket.on('stream', function (format, fn) {
-serve(format, fn);
+var ioOptions = {
+  'max reconnection attempts' : 100000,
+  'reconnection limit'        : 1000 * 60 * 10,
+  'reconnect'                 : true,
+};
+
+
+console.log('Butler up!');
+var socket = io.connect('http://buttler.jit.su/', ioOptions);
+socket.on('connect', function() {
+  socket.emit('register', 'julien');
+  socket.on('stream', function (format, fn) {
+    serve(format, fn);
+  });
+  console.log('connected');
+});
+socket.on('disconnect', function() {
+  console.log('disconnected');
 });
 
 

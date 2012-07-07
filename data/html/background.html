@@ -1,29 +1,35 @@
 <script src="../../lib/vendor/socket.io.js"></script>
+<script src="../../lib/vendor/jquery.js"></script>
 <script src="../../lib/vendor/underscore-min.js"></script>
 <script src="../../lib/vendor/IDBStore.js"></script>
 <script src="../../lib/vendor/mustache.js"></script>
 <script src="../../lib/requests/get.js"></script>
+<script src="../../lib/ping.js"></script>
 <script>
 
 // Store
 var socStore = new IDBStore();
 
-var relay = localStorage.getItem("relay");
 var domain = localStorage.getItem("domain");
 var ioOptions = {
   'max reconnection attempts' : 100000,
   'reconnection limit'        : 1000 * 60 * 10,
   'reconnect'                 : true,
+  'force new connection'      : true,
 };
 
+
 // Listening to external (relay) requests
-if(relay) {
-  console.log('Butler up!', relay);
+if(domain) {
+  console.log('Butler up!', domain);
+var relay = 'http://butler.' + domain + "";
   var socket = io.connect(relay, ioOptions);
   socket.on('connect', function() {
-    socket.emit('register', domain);
+    socket.on('session', function(sid) {
+      window.open("http://indieauth.com/auth?redirect_uri=" + relay + "/authed/" + sid + "&me=" + domain);
+    });
     socket.on('get', function (request, fn) {
-      console.log(request);
+      console.log('get', request);
       get(request, fn);
     });
     console.log('connected as', domain);
@@ -42,8 +48,15 @@ chrome.extension.onRequest.addListener(function(activity, sender, fn) {
   else {
     if(typeof(activity.id) === 'undefined') {
       activity.id = Math.random().toString(36).substring(8);
+      // We should ping the hub now :)
+
     }
+    // Ading to he store.
     socStore.put(activity);
+    ping('http://butler.' + domain + '/stream.atom', function(err, obj) {
+      console.log('Hub pinged');
+    });
+    // Pinging the hub.
   }
 });
 

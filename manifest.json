@@ -11,7 +11,7 @@
   "content_scripts": [
     {
       "js": [
-        "/lib/jquery.js",
+        "/lib/vendor/jquery.js",
         "/lib/interceptors/twitter.js",
         "/lib/interceptors/facebook.js"
       ],

@@ -31,7 +31,7 @@ If you want to serve the content of your butler to your friends:
 * ... wait for a couple hours for DNS propagation...
 * In the meantime, make sure you have a `rel=me` link at the root of your domain name that points to a service supported by [IndieAuth](https://indieauth.com/), like Twitter or Github. _If you go to [`http://ouvre-boite.com/`](http://ouvre-boite.com/) you will see that I have a link like this: `<a href="http://twitter.com/julien51" rel="me">Twitter</a>`. This tells people on my site that I own that Twitter account. Now go to [http://twitter.com/julien51](http://twitter.com/julien51) and you will see that there is a link like `<a target="_blank" rel="me nofollow" href="http://ouvre-boite.com">http://ouvre-boite.com</a>` which tells people I own this site too. Which means that, once it's 'proven' that I own that Twitter handle (thru their authentication), it's proven that I own the `ouvre-boite.com` domain._
 * ... Once DNS has been propagated ...
-* Go to [``chrome://chrome/extensions/](chrome://chrome/extensions/)
+* Go to [`chrome://chrome/extensions/`](chrome://chrome/extensions/)
 * Go to your local app's settings
 * Enter your domain name.
 * Restart Chrome.

@@ -19,7 +19,7 @@ want you do depend on a specific app/service for this).
 _This version is still an extremely early version. You may find bugs, issues: please report them._
 
 * `$ git clone git://github.com/julien51/indie-butler-app.git`
-* In Chrome (works with Canary too), go to: `[chrome://chrome/extensions/](chrome://chrome/extensions/)`
+* In Chrome (works with Canary too), go to: [`chrome://chrome/extensions/`](chrome://chrome/extensions/)
 * Click on `Developer Mode`
 * Click on `Load unpacked extension`
 * Point it to the `indie-butler-app` (from 1st step).
@@ -27,11 +27,11 @@ _This version is still an extremely early version. You may find bugs, issues: pl
 can check that by clicking on the 'indie-butler' app on your Chrome 'Home' screen.
 
 If you want to serve the content of your butler to your friends:
-* Create a CNAME record for the butler subdomain of your domain name. Make it point to an existing relay, like [http://butler.jit.su/](http://butler.jit.su/). Feel free to host your own relay as well (for free!) by following [these instructions](https://github.com/julien51/indie-butler-relay). _my domain is ouvre-boite.com, and I just pointed butler.ouvre-boite.com to http://butler.jit.su/_
+* Create a CNAME record for the butler subdomain of your domain name. Make it point to an existing relay, like [http://butler.jit.su/](http://butler.jit.su/). Feel free to host your own relay as well (for free!) by following [these instructions](https://github.com/julien51/indie-butler-relay). _My domain is ouvre-boite.com, and I just pointed butler.ouvre-boite.com to http://butler.jit.su/_
 * ... wait for a couple hours for DNS propagation...
-* In the meantime, make sure you have a `rel=me` link at the root of your domain name that points to a service supported by [IndieAuth](https://indieauth.com/), like Twitter or Github. _if you go to `[http://ouvre-boite.com/](http://ouvre-boite.com/)` you will see that I have a link like this: `<a href="http://twitter.com/julien51" rel="me">Twitter</a>`. This tells people on my site that I own that Twitter account. Now go to [http://twitter.com/julien51](http://twitter.com/julien51) and you will see that there is a link like `<a target="_blank" rel="me nofollow" href="http://ouvre-boite.com">http://ouvre-boite.com</a>` which tells people I own this site too. Which means that, once it's 'proven' that I own that Twitter handle (thru their authentication), it's proven that I own the `ouvre-boite.com` domain.
+* In the meantime, make sure you have a `rel=me` link at the root of your domain name that points to a service supported by [IndieAuth](https://indieauth.com/), like Twitter or Github. _If you go to [`http://ouvre-boite.com/`](http://ouvre-boite.com/) you will see that I have a link like this: `<a href="http://twitter.com/julien51" rel="me">Twitter</a>`. This tells people on my site that I own that Twitter account. Now go to [http://twitter.com/julien51](http://twitter.com/julien51) and you will see that there is a link like `<a target="_blank" rel="me nofollow" href="http://ouvre-boite.com">http://ouvre-boite.com</a>` which tells people I own this site too. Which means that, once it's 'proven' that I own that Twitter handle (thru their authentication), it's proven that I own the `ouvre-boite.com` domain.
 * ... Once DNS has been propagated ...
-* Go to `[chrome://chrome/extensions/](chrome://chrome/extensions/)`
+* Go to [``chrome://chrome/extensions/](chrome://chrome/extensions/)
 * Go to your local app's settings
 * Enter your domain name.
 * Restart Chrome.

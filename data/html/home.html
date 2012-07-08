@@ -1,5 +1,5 @@
 <script>
-    chrome.extension.sendRequest({get: {path: '/stream.html', headers: {}}}, function(resp){
+    chrome.extension.sendRequest({request: {method: 'get', path: '/stream', headers: {}}}, function(resp){
         document.write(resp.body);
     });
 </script>
